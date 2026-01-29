@@ -2,7 +2,7 @@
 
 A "Zero-Risk" Python trading bot that uses deep learning to predict stock movements. It trains on historical data and trades with a simulated "Fake Wallet" on the live market.
 
-Strategy: Generalist LSTM (Long Short-Term Memory) Neural Net.
+Strategy: Generalist LSTM (Long Short-Term Memory) Neural Net with feature engineering.
 Universe: S&P 500 subset (excluding top 10 giants like NVDA/AAPL).
 
 🛠️ Setup (The Workshop)
@@ -24,18 +24,18 @@ Before the bot can trade, it must learn what a stock chart looks like. We teach 
 
 Run the Trainer:
 
-python train.py
+python Train.py
 
 
 What happens:
 
-Downloads data for ~30 stocks (excluding the blacklist).
+Downloads adjusted data for ~30 stocks (excluding the blacklist) using splits/dividends adjusted prices.
 
-Normalizes prices (converts $150 -> 0.5).
+Builds features (returns, volatility, EMA, RSI, volume z-score) and normalizes per stock.
 
 Creates "Flashcards": sequences of 60 days to predict day 61.
 
-Trains the Neural Net for 25 Epochs.
+Trains the Neural Net with walk-forward validation and early stopping.
 
 Output:
 
@@ -61,6 +61,8 @@ Online Learning: Crucial Step. It looks at the most recent data for that specifi
 Predicts: Guesses the next price.
 
 Acts: Buys if predicted gain > 1%. Sells if predicted price < current price.
+Execution: Simulates slippage and fees for paper trading realism.
+Risk Controls: Max positions, max exposure, stop-loss/take-profit, and drawdown limits.
 
 The Scoreboard:
 
